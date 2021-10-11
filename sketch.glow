@@ -1,0 +1,36 @@
+#lang glow
+
+// Basically like a git pull 
+// Creator creates document
+// Contributer edits that document
+// the Creator can approve or deny, and then pay price
+
+data ContributionResult = | Approved | Denied;
+
+
+
+@interaction([Creator, Contributor])
+let payForContribution = (price : Nat,) => {
+
+    deposit! Creator -> price;
+    @Creator let originalContent = inputContent("input your content"); 
+    publish! Creator -> originalContent; 
+
+    /* are these just implied where does input come from? */
+    @Contributer let updatedContent = inputContent("input your changes to Names content"); 
+    publish! Contributer -> updatedContent; 
+
+    @Creator let response = inputResponse("do you like the changes?");
+    require! isContributionResult(response); // ? I guess
+
+    if (response == Approved){
+      // on approved 
+      withdraw! Contributor <- price;
+  } else {
+    
+    // send them a message
+  }
+
+   
+   
+  };
